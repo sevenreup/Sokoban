@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CE393961-26B0-422C-8035-8353BF1F23DF}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Sokoban</RootNamespace>
     <AssemblyName>Sokoban</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -34,7 +34,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -55,18 +64,45 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Compile Include="core\events\GameStateEve.cs" />
+    <Compile Include="core\Level\PowerUp.cs" />
+    <Compile Include="views\LevelComplete.xaml.cs">
+      <DependentUpon>LevelComplete.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="views\Version.xaml.cs">
+      <DependentUpon>Version.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Game.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
+    <Compile Include="core\Level\GameGrid.cs" />
+    <Compile Include="core\Level\LevelLoader.cs" />
+    <Compile Include="core\Level\Interface\IContent.cs" />
+    <Compile Include="core\Level\Model\Deliver.cs" />
+    <Compile Include="core\Level\Model\Dest.cs" />
+    <Compile Include="core\Level\Model\LevelData.cs" />
+    <Compile Include="core\Level\Model\ModelLevel.cs" />
+    <Compile Include="core\Level\Model\Crate.cs" />
+    <Compile Include="core\Level\Model\Floor.cs" />
+    <Compile Include="core\Level\Model\Player.cs" />
+    <Compile Include="core\Level\Interface\Tile.cs" />
+    <Compile Include="core\Level\Model\Wall.cs" />
+    <Compile Include="Game.xaml.cs">
+      <DependentUpon>Game.xaml</DependentUpon>
     </Compile>
+    <Page Include="views\LevelComplete.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="views\Version.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -86,6 +122,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -94,5 +131,24 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="levels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\box.png" />
+    <Resource Include="image\box_hit.png" />
+    <Resource Include="image\floor.png" />
+    <Resource Include="image\forklift.png" />
+    <Resource Include="image\target.png" />
+    <Resource Include="image\trash.png" />
+    <Resource Include="image\uitleg.png" />
+    <Resource Include="image\wall.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist "$(ProjectDir)$(OutDir)levels" mkdir "$(ProjectDir)$(OutDir)levels"
+
+delete  "$(ProjectDir)levels\*" 
+ copy "$(ProjectDir)levels\*"  "$(ProjectDir)$(OutDir)levels\"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

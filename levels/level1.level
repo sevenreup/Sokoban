@@ -1,0 +1,16 @@
+{
+"name": "Level One",
+"rows": 0,
+"columns": 0,
+"PowerUps": [{"PowerUp": 0, "Count": 1}, {"PowerUp": 1, "Count": 1}],
+"data": "##########
+#        #
+# #x#    #
+#     #  #
+#        #
+#    o   #
+#  @x #  #
+#        #
+#   ##   #
+##########"
+}
