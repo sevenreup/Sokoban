@@ -1,7 +1,9 @@
 {
 "name": "Level One",
-"rows": 10,
-"columns": 10,
+"Moves": 10,
+"rows": 0,
+"columns": 0,
+"PowerUps": [{"PowerUp": 0, "Count": 1}, {"PowerUp": 1, "Count": 1}],
 "data": "##########
 #        #
 # #    o #

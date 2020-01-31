@@ -14,7 +14,9 @@ namespace Sokoban.core.Level
     class GameGrid : Grid
     {
         LevelData ml;
-        private DispatcherTimer clock;
+        private DispatcherTimer bulletTimer;
+        Bullet bullet;
+
         public GameGrid(LevelData ml)
         {
             this.ml = ml;
@@ -25,6 +27,8 @@ namespace Sokoban.core.Level
             createGrid();
             renderTile();
             renderCharacters();
+            bulletTimer = new System.Windows.Threading.DispatcherTimer();
+            bulletTimer.Interval = TimeSpan.FromSeconds(1);
         }
 
         private void renderTile()
@@ -100,6 +104,39 @@ namespace Sokoban.core.Level
             ml.Tilemap[y, x].SetValue(Grid.RowProperty, ml.Tilemap[y, x].Y);
             this.Children.Remove(ml.Tilemap[y, x]);
             this.Children.Add(ml.Tilemap[y, x]);
+        }
+
+        public void spawnBullet(int x, int y, EventHandler handler)
+        {
+            bullet = new Bullet(x, y);
+            bullet.SetValue(Grid.ColumnProperty, x);
+            bullet.SetValue(Grid.RowProperty, y);
+
+            this.Children.Add(bullet);
+            bulletTimer.Tick += handler;
+            bulletTimer.Start();
+        }
+
+        public void redrawBullet(int x, int y)
+        {
+            bullet.SetValue(Grid.ColumnProperty, x);
+            bullet.SetValue(Grid.RowProperty, y);
+
+            this.Children.Remove(bullet);
+            this.Children.Add(bullet);
+        }
+
+        public void destroyCrate(int x, int y)
+        {
+            reDrawFloor(x, y);
+            this.Children.Remove(ml.Tilemap[y, x]);
+        }
+
+        public void destroyBullet(int x, int y)
+        {
+            this.Children.Remove(bullet);
+            bulletTimer.Stop();
+            bulletTimer.Tick += null;
         }
     }
 }

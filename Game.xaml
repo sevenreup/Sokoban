@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Name="Cont"
         Title="Sokoban" Height="439" Width="608"  WindowStartupLocation="CenterScreen"
-        KeyDown="keypress">
+        KeyDown="keypress"
+        WindowState="Maximized">
     <Grid>
         <Grid Name="splash">
             <Label x:Name="startButton" Content="Start" Foreground="#FF5EC5F5" FontSize="48" 

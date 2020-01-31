@@ -65,8 +65,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="core\events\GameStateEve.cs" />
+    <Compile Include="core\Level\Model\Bullet.cs" />
     <Compile Include="core\Level\PowerUp.cs" />
     <Compile Include="core\Level\Util.cs" />
+    <Compile Include="views\FailedDialog.xaml.cs">
+      <DependentUpon>FailedDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="views\LevelComplete.xaml.cs">
       <DependentUpon>LevelComplete.xaml</DependentUpon>
     </Compile>
@@ -96,6 +100,10 @@
     <Compile Include="Game.xaml.cs">
       <DependentUpon>Game.xaml</DependentUpon>
     </Compile>
+    <Page Include="views\FailedDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="views\LevelComplete.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

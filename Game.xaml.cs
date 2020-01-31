@@ -30,6 +30,13 @@ namespace Sokoban
         ModelLevel modelLevel;
         GameGrid gameGrid;
 
+        private int pX, pY;
+        private int nextX, nextY, secondX, secondY;
+        private int direction = 0;
+
+        private int bulletX, bulletY, bulletDir;
+        private bool isShooting = false;
+
         public Game()
         {
             InitializeComponent();
@@ -38,10 +45,9 @@ namespace Sokoban
             levelLoader = new LevelLoader(modelLevel);
 
             levelLoader.loadLevels();
-            
+
             
         }
-
         public void Init(String levelStr)
         {
             modelLevel.CurrentLevel = levelStr;
@@ -77,22 +83,27 @@ namespace Sokoban
 
             GUIUpdates();
         }
-
         private void GUIUpdates()
         {
+            moves.Content = "Moves : " + modelLevel.levelData.Moves;
             targetStatus();
             updatePoweUpCount();
         }
-
         private void StartButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.Init(modelLevel.Levels[0]);
         }
-
-        private int pX, pY;
-        private int nextX, nextY, secondX, secondY;
-        private int direction = 0;
         private void keypress(object sender, KeyEventArgs e)
+        {
+            if (modelLevel.inGame)
+            {
+                if(modelLevel.levelData.Moves > 0)
+                {
+                    moveInit(e);
+                }
+            }
+        }
+        private void moveInit(KeyEventArgs e)
         {
             pX = modelLevel.levelData.player.X;
             pY = modelLevel.levelData.player.Y;
@@ -127,7 +138,6 @@ namespace Sokoban
                     break;
             }
         }
-
         private void move()
         {
             checkDirections();
@@ -189,7 +199,6 @@ namespace Sokoban
                 }
             }
         }
-
         private void checkGameStatus()
         {
             if(modelLevel.levelData.Tiles[secondY][secondX] is Dest)
@@ -202,6 +211,7 @@ namespace Sokoban
             }
             if(modelLevel.levelData.remaingTargets.Equals(0))
             {
+                modelLevel.inGame = false;
                 levelFinished();
             }
             targetStatus();
@@ -215,56 +225,15 @@ namespace Sokoban
             //modelLevel.levelData.Tilemap[pY, pX].RenderTransform = angle;
             modelLevel.levelData.player.RenderTransform = angle;
         }
-
         private void updateMoves()
         {
-            modelLevel.levelData.Moves++;
+            modelLevel.levelData.Moves--;
             moves.Content = "Moves : " + modelLevel.levelData.Moves;
         }
-
         private void targetStatus()
         {
             targets.Content = ": " + modelLevel.levelData.remaingTargets;
         }
-
-        private void levelFinished()
-        {
-            modelLevel.inGame = false;
-            LevelComplete completeDLG = new LevelComplete(true, new core.events.ReplayLevel(nextLevel));
-            completeDLG.Owner = this;
-            completeDLG.ShowDialog();
-        }
-
-        public void nextLevel()
-        {
-            bool next = false;
-            string nextMap = null;
-
-            for(int i = 0; i < modelLevel.Levels.Count(); i++)
-            {
-                if(modelLevel.Levels[i].Equals(modelLevel.CurrentLevel))
-                {
-                    if(i + 1 >= modelLevel.Levels.Count())
-                    {
-                        next = false;
-                    } else
-                    {
-                        nextMap = modelLevel.Levels[i + 1];
-                        next = true;
-                    }
-                    break;
-                }
-            }
-            if(next)
-            {
-                Init(nextMap);
-            }
-            else
-            {
-                Console.WriteLine("no other map");
-            }
-        }
-
         private void usePowerUp(PowerUp type)
         {
             checkDirections();
@@ -286,13 +255,25 @@ namespace Sokoban
                                 }
                                 break;
                             case PowerUp.bullet:
+                                if(modelLevel.levelData.numberOfCrates > 0)
+                                {
+                                    if(!isShooting)
+                                    {
+                                        isShooting = true;
+                                        bool afterUse2 = useBullet();
+                                        if(afterUse2)
+                                        {
+                                            modelLevel.levelData.PowerUps[i].Count--;
+                                            updatePoweUpCount();
+                                        } 
+                                    }
+                                }
                                 break;
                         }
                     }
                 }
             }
         }
-
         private bool usePhase()
         {
             if (modelLevel.levelData.Tilemap[nextY, nextX] == null && modelLevel.levelData.Tiles[nextY][nextX] is Wall)
@@ -317,7 +298,6 @@ namespace Sokoban
             }
             return false;
         }
-
         private void updatePoweUpCount()
         {
             foreach(PowerUpHolder powerUp in modelLevel.levelData.PowerUps)
@@ -333,7 +313,6 @@ namespace Sokoban
                 }
             }
         }
-
         private void checkDirections()
         {
             switch(direction)
@@ -366,6 +345,127 @@ namespace Sokoban
                     secondX = pX + 2;
                     secondY = pY;
                     break;
+            }
+        }
+        private bool useBullet()
+        {
+            if(modelLevel.levelData.Tilemap[nextY,nextX] is Crate)
+            {
+                gameGrid.destroyCrate(nextX, nextY);
+                modelLevel.levelData.Tilemap[nextY, nextX] = null;
+                isShooting = false;
+                modelLevel.levelData.numberOfCrates--;
+                if(modelLevel.levelData.numberOfCrates <= 0)
+                {
+                    gamefailed("All crates have been destroyed");
+                }
+                return true;
+            } else
+            {
+                if(!(modelLevel.levelData.Tiles[nextY][nextX] is Wall))
+                {
+                    Console.WriteLine("Hit");
+                    bulletX = nextX;
+                    bulletY = nextY;
+                    bulletDir = direction;
+                    gameGrid.spawnBullet(nextX, nextY, new EventHandler(handleBullet));
+                    return true;
+                }
+            }
+            isShooting = false;
+            return false;
+        }
+        private void handleBullet(object sender, EventArgs e)
+        {
+            switch (bulletDir)
+            {
+                case Constant.UP:
+                    bulletY--;
+                    break;
+                case Constant.Down:
+                    bulletY++;
+                    break;
+                case Constant.Left:
+                    bulletX --;
+                    break;
+                case Constant.Right:
+                    bulletX++;
+                    break;
+            }
+            
+            if(bulletX >= 0 && bulletY >= 0 && bulletX < modelLevel.levelData.rows && bulletY < modelLevel.levelData.columns)
+            {
+                
+                if (modelLevel.levelData.Tilemap[bulletY, bulletX] is Crate)
+                {
+                    isShooting = false;
+                    gameGrid.destroyBullet(bulletX, bulletY);
+                    gameGrid.destroyCrate(bulletX, bulletY);
+                    modelLevel.levelData.Tilemap[bulletY, bulletX] = null;
+                    Console.WriteLine("(" + bulletX + ", " + bulletY + ")");
+                    modelLevel.levelData.numberOfCrates--;
+                    if (modelLevel.levelData.numberOfCrates <= 0)
+                    {
+                        gamefailed("All crates have been destroyed");
+                    }
+                } 
+                else if(modelLevel.levelData.Tiles[bulletY][bulletX] is Wall)
+                {
+                    gameGrid.destroyBullet(bulletX, bulletY);
+                    isShooting = false;
+                } else
+                {
+                    gameGrid.redrawBullet(bulletX, bulletY);
+                }
+            }
+            else
+            {
+                isShooting = false;
+                gameGrid.destroyBullet(nextX, nextY);
+            }
+        }
+        private void levelFinished()
+        {
+            modelLevel.inGame = false;
+            LevelComplete completeDLG = new LevelComplete(true, new core.events.ReplayLevel(nextLevel));
+            completeDLG.Owner = this;
+            completeDLG.ShowDialog();
+        }
+        private void gamefailed(String status)
+        {
+            modelLevel.inGame = false;
+            FailedDialog failedDialog = new FailedDialog();
+            failedDialog.Owner = this;
+            failedDialog.ShowDialog();
+        }
+        public void nextLevel()
+        {
+            bool next = false;
+            string nextMap = null;
+
+            for(int i = 0; i < modelLevel.Levels.Count(); i++)
+            {
+                if(modelLevel.Levels[i].Equals(modelLevel.CurrentLevel))
+                {
+                    if(i + 1 >= modelLevel.Levels.Count())
+                    {
+                        next = false;
+                    } else
+                    {
+                        nextMap = modelLevel.Levels[i + 1];
+                        next = true;
+                    }
+                    break;
+                }
+            }
+            if(next)
+            {
+                modelLevel.inGame = true;
+                Init(nextMap);
+            }
+            else
+            {
+                Console.WriteLine("no other map");
             }
         }
     }

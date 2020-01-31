@@ -81,6 +81,12 @@ namespace Sokoban.core.Level.Model
             get;
             set;
         }
+        private int crate = 0;
+        public int numberOfCrates
+        {
+            get { return crate; }
+            set { crate = value; }
+        }
         internal Tile[,] Tilemap { get => tilemap; set => tilemap = value; }
     }
 }

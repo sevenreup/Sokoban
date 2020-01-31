@@ -102,6 +102,7 @@ namespace Sokoban.core.Level
                             row.Add(floor3);
 
                             Crate crate = new Crate(x, y);
+                            modelLevel.levelData.numberOfCrates++;
                             modelLevel.levelData.Tilemap[y, x] = crate;
                             break;
                         case "@":
