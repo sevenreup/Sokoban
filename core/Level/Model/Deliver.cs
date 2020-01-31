@@ -10,12 +10,12 @@ namespace Sokoban.core.Level.Model
     {
         public Deliver(int x, int y): base(x, y)
         {
-            image = "box_hit";
+            image = "arrived";
         }
 
         public Deliver() : base(0, 0)
         {
-            image = "box_hit";
+            image = "arrived";
         }
     }
 }

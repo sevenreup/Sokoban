@@ -11,11 +11,11 @@ namespace Sokoban.core.Level.Model
     {
         public Wall(int x, int y): base(x, y)
         {
-            this.image = "wall";
+            this.image = "block";
         }
         public Wall(): base(0, 0)
         {
-            this.image = "wall";
+            this.image = "block";
         }
     }
 }

@@ -4,12 +4,12 @@
     {
         public Bullet(int x, int y) : base(x, y)
         {
-            image = "trash";
+            image = "bullet";
         }
 
         public Bullet(): base(0, 0)
         {
-            image = "trash";
+            image = "bullet";
         }
     }
 }

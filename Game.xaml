@@ -36,7 +36,7 @@
                 <Label Content="Level One" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="30" Width="62"/>
                 <Label Name="moves" Content="Moves : 0" Grid.Column="2" HorizontalAlignment="Right"  VerticalAlignment="Top" Height="26"/>
                 <StackPanel Grid.Column="1" Height="30"  VerticalAlignment="Top" Width="100" Orientation="Horizontal">
-                    <Image Height="30" Width="30" Source="/Sokoban;component/image/box_hit.png"/>
+                    <Image Height="30" Width="30" Source="image/target.png"/>
                     <Label Name="targets" Content=": 0"/>
                 </StackPanel>
 
@@ -52,11 +52,11 @@
                 <Button Grid.Column="2" Height="30" Width="90" Content="menu"/>
                 <StackPanel Grid.Column="1" HorizontalAlignment="Center" Orientation="Horizontal">
                     <StackPanel Height="30"  VerticalAlignment="Top" Width="100" Orientation="Horizontal">
-                        <Image Height="30" Width="30" Source="/Sokoban;component/image/forklift.png"/>
+                        <Image Height="30" Width="30" Source="image/warp.png"/>
                         <Label Name="pupPhase" Content=": 0"/>
                     </StackPanel>
                     <StackPanel Height="30"  VerticalAlignment="Top" Width="100" Orientation="Horizontal">
-                        <Image Height="30" Width="30" Source="/Sokoban;component/image/box_hit.png"/>
+                        <Image Height="30" Width="30" Source="image/bullet_icon.jpg"/>
                         <Label Name="pupBullet" Content=": 0"/>
                     </StackPanel>
                 </StackPanel>

@@ -13,12 +13,29 @@ namespace Sokoban.core.Level.Model
 
         public Player(int x, int y) : base(x, y)
         {
-            this.image = "forklift";
+            this.image = Left;
         }
 
         public Player() : base(0, 0)
         {
-            this.image = "forklift";
+            this.image = Left;
+        }
+
+        public String Left
+        {
+            get { return "player"; }
+        }
+        public String Right
+        {
+            get { return @"player\right"; }
+        }
+        public String Up
+        {
+            get { return @"player\up"; }
+        }
+        public String Down
+        {
+            get { return @"player\down"; }
         }
     }
 }

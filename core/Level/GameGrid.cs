@@ -21,9 +21,6 @@ namespace Sokoban.core.Level
         {
             this.ml = ml;
 
-            var bc = new BrushConverter();
-            this.Background = (Brush)bc.ConvertFrom("#FF5EC5F5");
-
             createGrid();
             renderTile();
             renderCharacters();
@@ -80,7 +77,6 @@ namespace Sokoban.core.Level
                 this.ColumnDefinitions.Add(col);
             }
         }
-
         public void reDrawPlayer()
         {
             ml.player.SetValue(Grid.ColumnProperty, ml.player.X);

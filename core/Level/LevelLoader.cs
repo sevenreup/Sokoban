@@ -114,6 +114,10 @@ namespace Sokoban.core.Level
                             Floor floor = new Floor(x, y);
                             row.Add(floor);
                             break;
+                        case "+":
+                            Empty empty = new Empty(x, y);
+                            row.Add(empty);
+                            break;
                     }
                 }
                 modelLevel.levelData.Tiles.Add(row);

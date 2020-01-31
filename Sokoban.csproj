@@ -66,6 +66,7 @@
     </ApplicationDefinition>
     <Compile Include="core\events\GameStateEve.cs" />
     <Compile Include="core\Level\Model\Bullet.cs" />
+    <Compile Include="core\Level\Model\Empty.cs" />
     <Compile Include="core\Level\PowerUp.cs" />
     <Compile Include="core\Level\Util.cs" />
     <Compile Include="views\FailedDialog.xaml.cs">
@@ -144,14 +145,29 @@
     <Folder Include="levels\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="image\box.png" />
-    <Resource Include="image\box_hit.png" />
     <Resource Include="image\floor.png" />
-    <Resource Include="image\forklift.png" />
     <Resource Include="image\target.png" />
-    <Resource Include="image\trash.png" />
-    <Resource Include="image\uitleg.png" />
-    <Resource Include="image\wall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\arrived.png" />
+    <Resource Include="image\block.png" />
+    <Resource Include="image\crate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\player\down.png" />
+    <Resource Include="image\player\left.png" />
+    <Resource Include="image\player\right.png" />
+    <Resource Include="image\player\up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\player.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\warp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\bullet.png" />
+    <Resource Include="image\bullet_icon.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

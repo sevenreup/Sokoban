@@ -11,12 +11,12 @@ namespace Sokoban.core.Level.Model
     {
         public Crate(int x, int y): base(x, y)
         {
-            this.image = "box";
+            this.image = "crate";
         }
 
         public Crate(): base(0, 0)
         {
-            this.image = "box";
+            this.image = "crate";
         }
     }
 }
