@@ -1,6 +1,7 @@
 ﻿using Sokoban.core;
 using Sokoban.core.Level;
 using Sokoban.core.Level.Model;
+using Sokoban.core.Level.power;
 using Sokoban.views;
 using System;
 using System.Collections.Generic;
@@ -74,7 +75,13 @@ namespace Sokoban
             Console.WriteLine("Grid \n width: " + gameCanvas.Width + "\nHeight: " + gameCanvas.Height);
             splash.Visibility = Visibility.Hidden;
 
+            GUIUpdates();
+        }
+
+        private void GUIUpdates()
+        {
             targetStatus();
+            updatePoweUpCount();
         }
 
         private void StartButton_MouseDown(object sender, MouseButtonEventArgs e)
@@ -84,61 +91,47 @@ namespace Sokoban
 
         private int pX, pY;
         private int nextX, nextY, secondX, secondY;
+        private int direction = 0;
         private void keypress(object sender, KeyEventArgs e)
         {
             pX = modelLevel.levelData.player.X;
             pY = modelLevel.levelData.player.Y;
-            Console.WriteLine("player : " + modelLevel.levelData.player.X + ", " + modelLevel.levelData.player.Y);
 
             switch (e.Key.ToString())
             {
                 case "Left":
                 case "A":
-                    nextX = pX - 1;
-                    nextY = pY;
-
-                    secondX = pX - 2;
-                    secondY = pY;
-
-                    move(180);
+                    direction = Constant.Left;
+                    move();
                     break;
                 case "Right":
                 case "D":
-                    nextX = pX + 1;
-                    nextY = pY;
-
-                    secondX = pX + 2;
-                    secondY = pY;
-
-                    move(0);
+                    direction = Constant.Right;
+                    move();
                     break;
                 case "Up":
                 case "W":
-                    nextX = pX;
-                    nextY = pY - 1;
-
-                    secondX = pX;
-                    secondY = pY - 2;
-
-                    move(270);
+                    direction = Constant.UP;
+                    move();
                     break;
                 case "Down":
                 case "S":
-                    nextX = pX;
-                    nextY = pY + 1;
-
-                    secondX = pX;
-                    secondY = pY + 2;
-
-                    move(90);
+                    direction = Constant.Down;
+                    move();
+                    break;
+                case "O":
+                    usePowerUp(PowerUp.bullet);
+                    break;
+                case "I":
+                    usePowerUp(PowerUp.phase);
                     break;
             }
         }
 
-        private void move(int rotation)
+        private void move()
         {
-            Console.WriteLine(pX + " : " + pY);
-            rotate(rotation);
+            checkDirections();
+            rotate();
             if (modelLevel.levelData.Tilemap[nextY, nextX] == null)
             {
                 if(modelLevel.levelData.Tiles[nextY][nextX] is Floor || modelLevel.levelData.Tiles[nextY][nextX] is Dest)
@@ -213,12 +206,12 @@ namespace Sokoban
             }
             targetStatus();
         }
-        private void rotate(int x)
+        private void rotate()
         {
             RotateTransform angle = new RotateTransform();
             angle.CenterY = 15;
             angle.CenterX = 15;
-            angle.Angle = x;
+            angle.Angle = direction;
             //modelLevel.levelData.Tilemap[pY, pX].RenderTransform = angle;
             modelLevel.levelData.player.RenderTransform = angle;
         }
@@ -272,8 +265,108 @@ namespace Sokoban
             }
         }
 
-        private void powerup()
+        private void usePowerUp(PowerUp type)
         {
+            checkDirections();
+            for(int i = 0; i < modelLevel.levelData.PowerUps.Count(); i++)
+            {
+                if (modelLevel.levelData.PowerUps[i].powerUp == type)
+                {
+                    if (modelLevel.levelData.PowerUps[i].Count != 0)
+                    {
+                        
+                        switch(modelLevel.levelData.PowerUps[i].powerUp)
+                        {
+                            case PowerUp.phase:
+                                bool afterUse = usePhase();
+                                if(afterUse)
+                                {
+                                    modelLevel.levelData.PowerUps[i].Count--;
+                                    updatePoweUpCount();
+                                }
+                                break;
+                            case PowerUp.bullet:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool usePhase()
+        {
+            if (modelLevel.levelData.Tilemap[nextY, nextX] == null && modelLevel.levelData.Tiles[nextY][nextX] is Wall)
+            {
+                if ((secondX > 0 && secondY > 0) && (secondX < modelLevel.levelData.columns && secondY < modelLevel.levelData.rows))
+                {
+                    if (!(modelLevel.levelData.Tiles[secondY][secondX] is Wall) && modelLevel.levelData.Tilemap[nextY, nextX] == null)
+                    {
+                        modelLevel.levelData.Tilemap[secondY, secondX] = modelLevel.levelData.Tilemap[pY, pX];
+                        modelLevel.levelData.Tilemap[pY, pX] = null;
+
+                        modelLevel.levelData.Tilemap[secondY, secondX].X = secondX;
+                        modelLevel.levelData.Tilemap[secondY, secondX].Y = secondY;
+
+                        modelLevel.levelData.player.X = secondX;
+                        modelLevel.levelData.player.Y = secondY;
+
+                        gameGrid.reDrawPlayer();
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private void updatePoweUpCount()
+        {
+            foreach(PowerUpHolder powerUp in modelLevel.levelData.PowerUps)
+            {
+                switch(powerUp.powerUp)
+                {
+                    case PowerUp.phase:
+                        pupPhase.Content = ": " + powerUp.Count;
+                        break;
+                    case PowerUp.bullet:
+                        pupBullet.Content = ": " + powerUp.Count;
+                        break;
+                }
+            }
+        }
+
+        private void checkDirections()
+        {
+            switch(direction)
+            {
+                case Constant.UP:
+                    nextX = pX;
+                    nextY = pY - 1;
+
+                    secondX = pX;
+                    secondY = pY - 2;
+                    break;
+                case Constant.Down:
+                    nextX = pX;
+                    nextY = pY + 1;
+
+                    secondX = pX;
+                    secondY = pY + 2;
+                    break;
+                case Constant.Left:
+                    nextX = pX - 1;
+                    nextY = pY;
+
+                    secondX = pX - 2;
+                    secondY = pY;
+                    break;
+                case Constant.Right:
+                    nextX = pX + 1;
+                    nextY = pY;
+
+                    secondX = pX + 2;
+                    secondY = pY;
+                    break;
+            }
         }
     }
 }

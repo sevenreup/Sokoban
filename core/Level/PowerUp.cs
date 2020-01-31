@@ -3,7 +3,7 @@
     enum PowerUp
     {
         bullet,
-        teleport
+        phase
     }
 
     class PowerUpHolder

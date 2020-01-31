@@ -66,6 +66,7 @@
     </ApplicationDefinition>
     <Compile Include="core\events\GameStateEve.cs" />
     <Compile Include="core\Level\PowerUp.cs" />
+    <Compile Include="core\Level\Util.cs" />
     <Compile Include="views\LevelComplete.xaml.cs">
       <DependentUpon>LevelComplete.xaml</DependentUpon>
     </Compile>

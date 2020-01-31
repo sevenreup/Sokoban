@@ -52,11 +52,11 @@
                 <StackPanel Grid.Column="1" HorizontalAlignment="Center" Orientation="Horizontal">
                     <StackPanel Height="30"  VerticalAlignment="Top" Width="100" Orientation="Horizontal">
                         <Image Height="30" Width="30" Source="/Sokoban;component/image/forklift.png"/>
-                        <Label Content=": 0"/>
+                        <Label Name="pupPhase" Content=": 0"/>
                     </StackPanel>
                     <StackPanel Height="30"  VerticalAlignment="Top" Width="100" Orientation="Horizontal">
                         <Image Height="30" Width="30" Source="/Sokoban;component/image/box_hit.png"/>
-                        <Label Content=": 0"/>
+                        <Label Name="pupBullet" Content=": 0"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
