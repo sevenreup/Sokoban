@@ -4,18 +4,11 @@ using Sokoban.core.Level.Model;
 using Sokoban.core.Level.power;
 using Sokoban.views;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Sokoban
 {
@@ -23,7 +16,7 @@ namespace Sokoban
     /// Interaction logic for Game.xaml
     /// </summary>
     ///
-    
+
     public partial class Game : Window
     {
         LevelLoader levelLoader;
@@ -36,6 +29,9 @@ namespace Sokoban
 
         private int bulletX, bulletY, bulletDir;
         private bool isShooting = false;
+        string nextMap = null;
+
+        GameState gameState;
 
         public Game()
         {
@@ -43,17 +39,15 @@ namespace Sokoban
 
             modelLevel = new ModelLevel();
             levelLoader = new LevelLoader(modelLevel);
-
+            gameState = new GameState(new BlockedResponse(checkBlockedState));
             levelLoader.loadLevels();
-
-            
         }
         public void Init(String levelStr)
         {
             modelLevel.CurrentLevel = levelStr;
             levelLoader.initLevel();
             levelLoader.initiateTileSet();
-            modelLevel.inGame = true;
+            
 
             gameDef.Height = new GridLength(modelLevel.GDHeight);
 
@@ -80,7 +74,7 @@ namespace Sokoban
             gameCanvas.Visibility = Visibility.Visible;
             Console.WriteLine("Grid \n width: " + gameCanvas.Width + "\nHeight: " + gameCanvas.Height);
             splash.Visibility = Visibility.Hidden;
-
+            modelLevel.inGame = true;
             GUIUpdates();
         }
         private void GUIUpdates()
@@ -97,10 +91,7 @@ namespace Sokoban
         {
             if (modelLevel.inGame)
             {
-                if(modelLevel.levelData.Moves > 0)
-                {
-                    moveInit(e);
-                }
+                moveInit(e);
             }
         }
         private void moveInit(KeyEventArgs e)
@@ -142,79 +133,93 @@ namespace Sokoban
         {
             checkDirections();
             rotate();
-            if (modelLevel.levelData.Tilemap[nextY, nextX] == null)
+            if (checkGameStatus())
             {
-                if(modelLevel.levelData.Tiles[nextY][nextX] is Floor || modelLevel.levelData.Tiles[nextY][nextX] is Dest)
+                if (modelLevel.levelData.Tilemap[nextY, nextX] == null)
                 {
-                    updateMoves();
-
-                    modelLevel.levelData.Tilemap[nextY, nextX] = modelLevel.levelData.Tilemap[pY, pX];
-                    modelLevel.levelData.Tilemap[pY, pX] = null;
-
-                    modelLevel.levelData.player.X = nextX; 
-                    modelLevel.levelData.player.Y = nextY;
-
-                    gameGrid.reDrawPlayer();
-                }
-            }
-            else
-            {
-                if(modelLevel.levelData.Tilemap[secondY, secondX] == null && !(modelLevel.levelData.Tiles[secondY][secondX] is Wall))
-                {
-                    updateMoves();
-
-                    if(modelLevel.levelData.Tiles[secondY][secondX] is Dest)
+                    if (modelLevel.levelData.Tiles[nextY][nextX] is Floor || modelLevel.levelData.Tiles[nextY][nextX] is Dest)
                     {
-                        Deliver delivery = new Deliver();
-                        modelLevel.levelData.Tilemap[secondY, secondX] = delivery;
+                        updateMoves();
+
                         modelLevel.levelData.Tilemap[nextY, nextX] = modelLevel.levelData.Tilemap[pY, pX];
                         modelLevel.levelData.Tilemap[pY, pX] = null;
-                        gameGrid.reDrawFloor(nextX, nextY);
-                    } 
-                    else if (modelLevel.levelData.Tilemap[nextY, nextX] is Deliver)
-                    {
-                        Crate crate = new Crate();
-                        modelLevel.levelData.Tilemap[secondY, secondX] = crate;
-                        modelLevel.levelData.Tilemap[nextY, nextX] = modelLevel.levelData.Tilemap[pY,pX];
-                        modelLevel.levelData.Tilemap[pY, pX] = null;
-                        gameGrid.reDrawFloor(nextX, nextY);
 
+                        modelLevel.levelData.player.X = nextX;
+                        modelLevel.levelData.player.Y = nextY;
+
+                        gameGrid.reDrawPlayer();
+                        gameState.computeBroke(modelLevel.levelData);
                     }
-                    else
-                    {
-                        modelLevel.levelData.Tilemap[secondY, secondX] = modelLevel.levelData.Tilemap[nextY, nextX];
-                        modelLevel.levelData.Tilemap[nextY, nextX] = modelLevel.levelData.Tilemap[pY,pX];
-                        modelLevel.levelData.Tilemap[pY, pX] = null;
-                    }
-
-                    modelLevel.levelData.player.X = nextX;
-                    modelLevel.levelData.player.Y = nextY;
-
-                    modelLevel.levelData.Tilemap[secondY, secondX].X = secondX;
-                    modelLevel.levelData.Tilemap[secondY, secondX].Y = secondY;
-
-                    gameGrid.reDrawComp(secondX, secondY);
-
-                    checkGameStatus();
                 }
-            }
+                else
+                {
+                    if (modelLevel.levelData.Tilemap[secondY, secondX] == null && !(modelLevel.levelData.Tiles[secondY][secondX] is Wall))
+                    {
+                        updateMoves();
+
+                        if (modelLevel.levelData.Tiles[secondY][secondX] is Dest)
+                        {
+                            Deliver delivery = new Deliver();
+                            modelLevel.levelData.Tilemap[secondY, secondX] = delivery;
+                            modelLevel.levelData.Tilemap[nextY, nextX] = modelLevel.levelData.Tilemap[pY, pX];
+                            modelLevel.levelData.Tilemap[pY, pX] = null;
+                            gameGrid.reDrawFloor(nextX, nextY);
+                            modelLevel.levelData.remaingTargets--;
+                            
+                        }
+                        else if (modelLevel.levelData.Tilemap[nextY, nextX] is Deliver)
+                        {
+                            Crate crate = new Crate();
+                            modelLevel.levelData.Tilemap[secondY, secondX] = crate;
+                            modelLevel.levelData.Tilemap[nextY, nextX] = modelLevel.levelData.Tilemap[pY, pX];
+                            modelLevel.levelData.Tilemap[pY, pX] = null;
+                            gameGrid.reDrawFloor(nextX, nextY);
+
+                        }
+                        else
+                        {
+                            modelLevel.levelData.Tilemap[secondY, secondX] = modelLevel.levelData.Tilemap[nextY, nextX];
+                            modelLevel.levelData.Tilemap[nextY, nextX] = modelLevel.levelData.Tilemap[pY, pX];
+                            modelLevel.levelData.Tilemap[pY, pX] = null;
+                        }
+
+                        modelLevel.levelData.player.X = nextX;
+                        modelLevel.levelData.player.Y = nextY;
+
+                        modelLevel.levelData.Tilemap[secondY, secondX].X = secondX;
+                        modelLevel.levelData.Tilemap[secondY, secondX].Y = secondY;
+
+                        gameGrid.reDrawComp(secondX, secondY);
+
+                        if(modelLevel.levelData.Tiles[secondY][secondX] is Dest)
+                        {
+                            modelLevel.levelData.remaingTargets--;
+                        }
+                        if(modelLevel.levelData.Tiles[nextY][nextX] is Dest)
+                        {
+                            modelLevel.levelData.remaingTargets++;
+                        }
+                        targetStatus();
+                        
+                        if (modelLevel.levelData.remaingTargets <= 0)
+                        {
+                            GameCompleteStatus(true, "all targets you win");
+                        } else
+                        {
+                            gameState.computeBroke(modelLevel.levelData);
+                        }
+                    }
+                }
+            } 
         }
-        private void checkGameStatus()
+        private bool checkGameStatus()
         {
-            if(modelLevel.levelData.Tiles[secondY][secondX] is Dest)
+            if(modelLevel.levelData.Moves <= 0)
             {
-                modelLevel.levelData.remaingTargets--;
-            }
-            if(modelLevel.levelData.Tiles[nextY][nextX] is Dest)
-            {
-                modelLevel.levelData.remaingTargets++;
-            }
-            if(modelLevel.levelData.remaingTargets.Equals(0))
-            {
-                modelLevel.inGame = false;
-                levelFinished();
-            }
-            targetStatus();
+                GameCompleteStatus(false, "No more moves");
+                return false;
+            } 
+            return true;
         }
         private void rotate()
         {
@@ -313,6 +318,15 @@ namespace Sokoban
                 }
             }
         }
+        private void restart_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            retry();
+        }
+        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            gameCanvas.Visibility = Visibility.Collapsed;
+            splash.Visibility = Visibility.Visible;
+        }
         private void checkDirections()
         {
             switch(direction)
@@ -357,7 +371,7 @@ namespace Sokoban
                 modelLevel.levelData.numberOfCrates--;
                 if(modelLevel.levelData.numberOfCrates <= 0)
                 {
-                    gamefailed("All crates have been destroyed");
+                    GameCompleteStatus(false,"All crates have been destroyed");
                 }
                 return true;
             } else
@@ -406,7 +420,7 @@ namespace Sokoban
                     modelLevel.levelData.numberOfCrates--;
                     if (modelLevel.levelData.numberOfCrates <= 0)
                     {
-                        gamefailed("All crates have been destroyed");
+                        GameCompleteStatus(false, "All crates have been destroyed");
                     }
                 } 
                 else if(modelLevel.levelData.Tiles[bulletY][bulletX] is Wall)
@@ -424,48 +438,44 @@ namespace Sokoban
                 gameGrid.destroyBullet(nextX, nextY);
             }
         }
-        private void levelFinished()
+        private void GameCompleteStatus(bool status, String message)
         {
+            if (status) {
+                for (int i = 0; i < modelLevel.Levels.Count(); i++)
+                {
+                    if (modelLevel.Levels[i].Equals(modelLevel.CurrentLevel))
+                    {
+                        if (i + 1 >= modelLevel.Levels.Count())
+                        {
+                            status = false;
+                        }
+                        else
+                        {
+                            nextMap = modelLevel.Levels[i + 1];
+                            status = true;
+                        }
+                        break;
+                    }
+                }
+            }
             modelLevel.inGame = false;
-            LevelComplete completeDLG = new LevelComplete(true, new core.events.ReplayLevel(nextLevel));
-            completeDLG.Owner = this;
-            completeDLG.ShowDialog();
-        }
-        private void gamefailed(String status)
-        {
-            modelLevel.inGame = false;
-            FailedDialog failedDialog = new FailedDialog();
+            StatusDialog failedDialog = new StatusDialog(status, message, new NextLevel(nextLevel), new RetryLevel(retry), new PreviousLevel(retry));
             failedDialog.Owner = this;
             failedDialog.ShowDialog();
         }
         public void nextLevel()
         {
-            bool next = false;
-            string nextMap = null;
-
-            for(int i = 0; i < modelLevel.Levels.Count(); i++)
+            Init(nextMap);
+        }
+        public void retry()
+        {
+            this.Init(modelLevel.CurrentLevel);
+        }
+        private void checkBlockedState(bool blocked)
+        {
+            if(blocked)
             {
-                if(modelLevel.Levels[i].Equals(modelLevel.CurrentLevel))
-                {
-                    if(i + 1 >= modelLevel.Levels.Count())
-                    {
-                        next = false;
-                    } else
-                    {
-                        nextMap = modelLevel.Levels[i + 1];
-                        next = true;
-                    }
-                    break;
-                }
-            }
-            if(next)
-            {
-                modelLevel.inGame = true;
-                Init(nextMap);
-            }
-            else
-            {
-                Console.WriteLine("no other map");
+                GameCompleteStatus(false, "Crates cannot be moved");
             }
         }
     }

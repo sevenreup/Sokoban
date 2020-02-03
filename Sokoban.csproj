@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -58,6 +59,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfAnimatedGif, Version=1.4.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\WpfAnimatedGif.1.4.18\lib\net\WpfAnimatedGif.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -65,15 +69,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="core\events\GameStateEve.cs" />
+    <Compile Include="core\GameState.cs" />
     <Compile Include="core\Level\Model\Bullet.cs" />
     <Compile Include="core\Level\Model\Empty.cs" />
+    <Compile Include="core\Level\Model\Player2.cs" />
     <Compile Include="core\Level\PowerUp.cs" />
     <Compile Include="core\Level\Util.cs" />
-    <Compile Include="views\FailedDialog.xaml.cs">
-      <DependentUpon>FailedDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="views\LevelComplete.xaml.cs">
-      <DependentUpon>LevelComplete.xaml</DependentUpon>
+    <Compile Include="core\Util.cs" />
+    <Compile Include="views\StatusDialog.xaml.cs">
+      <DependentUpon>StatusDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="views\Version.xaml.cs">
       <DependentUpon>Version.xaml</DependentUpon>
@@ -101,11 +105,7 @@
     <Compile Include="Game.xaml.cs">
       <DependentUpon>Game.xaml</DependentUpon>
     </Compile>
-    <Page Include="views\FailedDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="views\LevelComplete.xaml">
+    <Page Include="views\StatusDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -168,6 +168,27 @@
   <ItemGroup>
     <Resource Include="image\bullet.png" />
     <Resource Include="image\bullet_icon.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\spritesheet\sokoban_tilesheet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\ui\completed.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\ui\bg-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\ui\next.png" />
+    <Resource Include="image\ui\prev.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\ui\restart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\ui\menu.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

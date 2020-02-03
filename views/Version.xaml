@@ -5,52 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sokoban.views"
         mc:Ignorable="d"
-        Title="Version" Height="450" Width="800">
-    <Grid>
-        <Grid Name="gameCanvas" >
+        Title="Version" Height="450" Width="800" Background="#FF666666">
+    <Grid Name="gameCanvas" Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Name="gameDef" Height="60*"></RowDefinition>
+            <RowDefinition Height="360*"></RowDefinition>
+            <RowDefinition Height="60*"/>
+
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Name="gameDef" Height="30"></RowDefinition>
-                <RowDefinition Height="360*"></RowDefinition>
-                <RowDefinition Height="30"/>
+            <Label Content="Level One" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="62"/>
+            <Label Name="moves" Content="Moves : 0" Grid.Column="2" HorizontalAlignment="Right"  VerticalAlignment="Top"/>
+            <StackPanel Grid.Column="1"  VerticalAlignment="Top" Width="100" Orientation="Horizontal">
+                <Image Height="30" Width="30" Source="/Sokoban;component/image/target.png" />
+                <Label Name="targets" Content=": 0"/>
+            </StackPanel>
 
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Label Content="Level One" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="26" Width="62"/>
-                <Label Content="Moves : 0" Grid.Column="2" HorizontalAlignment="Right"  VerticalAlignment="Top" Height="26" Width="61"/>
-                <StackPanel Grid.Column="1" Height="30"  VerticalAlignment="Top" Width="100" Orientation="Horizontal">
-                    <Image Height="30" Width="30" Source="/Sokoban;component/image/box_hit.png"/>
-                    <Label Content=": 0"/>
+
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Height="30" Width="90" Source="/Sokoban;component/image/ui/menu.png" />
+            <Image Name="restart" Grid.Column="2" Height="30" Width="90" Source="/Sokoban;component/image/ui/restart.png" />
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel  VerticalAlignment="Top" Width="100" Orientation="Horizontal">
+                    <Image Height="30" Source="/Sokoban;component/image/warp.png" />
+                    <Label Name="pupPhase" Content=": 0"/>
                 </StackPanel>
-
-
-            </Grid>
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Height="30" Width="90" Content="Reset"/>
-                <Button Grid.Column="2" Height="30" Width="90" Content="menu"/>
-                <StackPanel Grid.Column="1" HorizontalAlignment="Center" Orientation="Horizontal">
-                    <StackPanel Height="30"  VerticalAlignment="Top" Width="100" Orientation="Horizontal">
-                        <Image Height="30" Width="30" Source="/Sokoban;component/image/forklift.png"/>
-                        <Label Content=": 0"/>
-                    </StackPanel>
-                    <StackPanel Height="30"  VerticalAlignment="Top" Width="100" Orientation="Horizontal">
-                        <Image Height="30" Width="30" Source="/Sokoban;component/image/box_hit.png"/>
-                        <Label Content=": 0"/>
-                    </StackPanel>
+                <StackPanel  VerticalAlignment="Top" Width="100" Orientation="Horizontal">
+                    <Image  Width="30" Source="/Sokoban;component/image/bullet.png" />
+                    <Label Name="pupBullet" Content=": 0"/>
                 </StackPanel>
-            </Grid>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
