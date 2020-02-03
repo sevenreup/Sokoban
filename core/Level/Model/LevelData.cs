@@ -15,7 +15,7 @@ namespace Sokoban.core.Level.Model
             rows = 0;
         }
 
-        private int gridSize = 30;
+        private int gridSize = 20;
         public int GridSize
         {
             get { return gridSize; }
