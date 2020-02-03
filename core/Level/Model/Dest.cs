@@ -12,5 +12,9 @@ namespace Sokoban.core.Level.Model
         {
             image = "target";
         }
+        public Dest(): base(0, 0)
+        {
+            image = "target";
+        }
     }
 }

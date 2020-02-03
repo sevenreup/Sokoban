@@ -12,7 +12,7 @@ using System.Windows.Shapes;
 
 namespace Sokoban.core.Level.Model
 {
-    class Player : Tile
+    public class Player : Tile
     {
         private ImageBrush imageBrush;
         TranslateTransform SpriteSheetOffset;

@@ -70,17 +70,18 @@
     </ApplicationDefinition>
     <Compile Include="core\events\GameStateEve.cs" />
     <Compile Include="core\GameState.cs" />
+    <Compile Include="core\LevelSaver.cs" />
     <Compile Include="core\Level\Model\Bullet.cs" />
     <Compile Include="core\Level\Model\Empty.cs" />
     <Compile Include="core\Level\Model\Player2.cs" />
     <Compile Include="core\Level\PowerUp.cs" />
     <Compile Include="core\Level\Util.cs" />
     <Compile Include="core\Util.cs" />
+    <Compile Include="views\LevelEditor.xaml.cs">
+      <DependentUpon>LevelEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="views\StatusDialog.xaml.cs">
       <DependentUpon>StatusDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="views\Version.xaml.cs">
-      <DependentUpon>Version.xaml</DependentUpon>
     </Compile>
     <Page Include="Game.xaml">
       <SubType>Designer</SubType>
@@ -105,11 +106,11 @@
     <Compile Include="Game.xaml.cs">
       <DependentUpon>Game.xaml</DependentUpon>
     </Compile>
-    <Page Include="views\StatusDialog.xaml">
+    <Page Include="views\LevelEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="views\Version.xaml">
+    <Page Include="views\StatusDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

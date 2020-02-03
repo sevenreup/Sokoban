@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sokoban.core.Level.Model
 {
-    class ModelLevel
+    public class ModelLevel
     {
         public ModelLevel()
         {
@@ -44,6 +44,11 @@ namespace Sokoban.core.Level.Model
         {
             get;
             set;
+        }
+        private int gridSize = 20;
+        public int GridSize
+        {
+            get { return gridSize; }
         }
     }
 }

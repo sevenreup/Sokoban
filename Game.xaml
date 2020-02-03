@@ -34,6 +34,7 @@
                     VerticalAlignment="Bottom" HorizontalAlignment="Center" Cursor="Hand"
                     />
             </StackPanel>
+            <Label Grid.Row="2" Content="LevelEditor" MouseDown="Label_MouseDown"/>
         </Grid>
         <Grid Name="gameCanvas" Margin="20"  Visibility="Collapsed">
             <Grid.ColumnDefinitions>

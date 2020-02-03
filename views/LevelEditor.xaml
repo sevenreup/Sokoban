@@ -1,0 +1,31 @@
+﻿<Window x:Class="Sokoban.views.LevelEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sokoban.views"
+        mc:Ignorable="d"
+        Title="LevelEditor" Height="700" Width="1110.606" Background="#FF666666">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="917*"/>
+            <ColumnDefinition Width="186*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="1">
+            <Button Name="save" Content="Save" MouseDown="save_MouseDown"/>
+            <Button Name="clear" Content="clear" MouseDown="clear_MouseDown"/>
+            <Button Name="delete" Content="delete" MouseDown="delete_MouseDown"/>
+            <ListBox Name="tileList" Height="350"/>
+            <Label Content="Name : "/>
+            <TextBox Name="levelname" Height="30"/>
+            <Label Content="Power Ups"/>
+            <CheckBox Name="warp" Content="Warp"/>
+            <CheckBox Name="bullet" Content="Bullet"/>
+            <Label Content="Moves : "/>
+            <TextBox Name="numberMoves" Height="30"/>
+        </StackPanel>
+        <Grid Name="levelTiles"  ShowGridLines="True" Background="#33000000" HorizontalAlignment="Left" VerticalAlignment="Top" MouseDown="levelTile_MouseDown">
+            
+        </Grid>
+    </Grid>
+</Window>

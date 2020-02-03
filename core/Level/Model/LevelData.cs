@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sokoban.core.Level.Model
 {
-    class LevelData
+    public class LevelData
     {
         public LevelData()
         {

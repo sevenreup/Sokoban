@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace Sokoban.core.Level.Model
 {
-    class Tile: Image
+    public class Tile: Image
     {
         public Tile(int x, int y)
         {

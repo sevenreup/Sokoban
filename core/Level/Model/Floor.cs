@@ -13,5 +13,10 @@ namespace Sokoban.core.Level.Model
         {
             this.image = "floor";
         }
+
+        public Floor(): base(0, 0)
+        {
+            this.image = "floor";
+        }
     }
 }

@@ -361,6 +361,14 @@ namespace Sokoban
                     break;
             }
         }
+
+        private void Label_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            LevelEditor levelEditor = new LevelEditor(modelLevel);
+            levelEditor.Show();
+            levelEditor.Activate();
+        }
+
         private bool useBullet()
         {
             if(modelLevel.levelData.Tilemap[nextY,nextX] is Crate)
