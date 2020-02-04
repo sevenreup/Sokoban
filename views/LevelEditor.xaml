@@ -8,11 +8,10 @@
         Title="LevelEditor" Height="700" Width="1110.606" Background="#FF666666">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="748*"/>
-            <ColumnDefinition Width="169*"/>
+            <ColumnDefinition Width="917*"/>
             <ColumnDefinition Width="186*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="2">
+        <StackPanel Grid.Column="1">
             <Button Name="save" Content="Save" MouseDown="save_MouseDown"/>
             <Button Name="clear" Content="clear" MouseDown="clear_MouseDown"/>
             <Button Name="delete" Content="delete" MouseDown="delete_MouseDown"/>
@@ -25,9 +24,8 @@
             <Label Content="Moves : "/>
             <TextBox Name="numberMoves" Height="30"/>
         </StackPanel>
-        <ListBox Name="availableLevels" Grid.Column="1" SelectionChanged="availableLevels_SelectionChanged"/>
-        <Grid Name="levelTiles"  ShowGridLines="True" Background="#33000000" HorizontalAlignment="Left" VerticalAlignment="Top" MouseDown="levelTile_MouseDown" >
-
+        <Grid Name="levelTiles"  ShowGridLines="True" Background="#33000000" HorizontalAlignment="Left" VerticalAlignment="Top" MouseDown="levelTile_MouseDown">
+            
         </Grid>
     </Grid>
 </Window>

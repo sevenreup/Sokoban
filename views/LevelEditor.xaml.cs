@@ -1,5 +1,4 @@
 ﻿using Sokoban.core;
-using Sokoban.core.Level;
 using Sokoban.core.Level.Model;
 using System;
 using System.Collections.Generic;
@@ -25,15 +24,11 @@ namespace Sokoban.views
         List<List<Tile>> tiles = new List<List<Tile>>();
         int size = 29;
         ModelLevel modelLevel;
-        LevelLoader levelLoader;
-        String file;
 
         public LevelEditor(ModelLevel modelLevel)
         {
             InitializeComponent();
             this.modelLevel = modelLevel;
-            levelLoader = new LevelLoader(modelLevel);
-            availableLevels.ItemsSource = modelLevel.Levels;
 
             tileList.Items.Add(new Player());
             tileList.Items.Add(new Wall());
@@ -115,17 +110,13 @@ namespace Sokoban.views
         private void delete_MouseDown(object sender, MouseButtonEventArgs e)
         {
             levelTiles.Children.Clear();
-            levelTiles.ColumnDefinitions.Clear();
-            levelTiles.RowDefinitions.Clear();
             setup();
         }
 
         private void clear_MouseDown(object sender, MouseButtonEventArgs e)
         {
             levelTiles.Children.Clear();
-            levelTiles.ColumnDefinitions.Clear();
-            levelTiles.RowDefinitions.Clear();
-            tiles = new List<List<Tile>>();
+            tiles = null;
             setup();
         }
 
@@ -147,71 +138,6 @@ namespace Sokoban.views
         {
            
             LevelSaver levelSaver = new LevelSaver(tiles, levelname.Text, numberMoves.Text,bullet.IsChecked.Value, warp.IsChecked.Value);
-        }
-
-        private void useMap()
-        {
-            levelTiles.Children.Clear();
-            levelTiles.ColumnDefinitions.Clear();
-            levelTiles.RowDefinitions.Clear();
-            tiles.Clear();
-
-            List<List<String>> tempM = modelLevel.tempLevData;
-            
-            for (int i = 0; i < tempM.Count; i++)
-            {
-                horizontal();
-                vertical();
-            }
-
-            for (int y = 0; y < tempM.Count; y++)
-            {
-                List<Tile> temp = new List<Tile>();
-
-                for (int x= 0; x < tempM.Count; x++)
-                {
-                    Tile tile;
-                    switch (tempM[y][x])
-                    {
-                        case "o":
-                            tile = new Player();
-                            break;
-                        case "#":
-                            tile = new Wall();
-                            break;
-                        case " ":
-                            tile = new Floor();
-                            break;
-                        case "@":
-                            tile = new Dest();
-                            break;
-                        case "x":
-                            tile = new Crate();
-                            break;
-                        default:
-                            tile = new Empty();
-                            break;
-                    }
-                    tile.SetValue(Grid.ColumnProperty, x);
-                    tile.SetValue(Grid.RowProperty, y);
-
-                    temp.Add(tile);
-                    levelTiles.Children.Remove(tile);
-                    levelTiles.Children.Add(tile);
-                }
-                tiles.Add(temp);
-
-            }
-            
-        }
-
-        private void availableLevels_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            modelLevel.CurrentLevel = availableLevels.SelectedItem.ToString();
-            levelLoader.initLevel();
-            levelLoader.initiateTileSet();
-            useMap();
-            file = availableLevels.SelectedItem.ToString();
         }
     }
 }
