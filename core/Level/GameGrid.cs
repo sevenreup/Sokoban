@@ -14,12 +14,14 @@ namespace Sokoban.core.Level
     class GameGrid : Grid
     {
         LevelData ml;
+        ModelLevel model;
         private DispatcherTimer bulletTimer;
         Bullet bullet;
 
-        public GameGrid(LevelData ml)
+        public GameGrid(ModelLevel model)
         {
-            this.ml = ml;
+            this.model = model;
+            this.ml = model.levelData;
 
             createGrid();
             renderTile();
@@ -80,14 +82,14 @@ namespace Sokoban.core.Level
             for(int i = 0; i < ml.rows; i++)
             {
                 RowDefinition row = new RowDefinition();
-                row.Height = new GridLength(ml.GridSize);
+                row.Height = new GridLength(model.GridSize);
                 this.RowDefinitions.Add(row);
             }
 
             for (int i = 0; i < ml.columns; i++)
             {
                 ColumnDefinition col = new ColumnDefinition();
-                col.Width = new GridLength(ml.GridSize);
+                col.Width = new GridLength(model.GridSize);
                 this.ColumnDefinitions.Add(col);
             }
         }

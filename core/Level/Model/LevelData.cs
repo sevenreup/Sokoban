@@ -15,12 +15,6 @@ namespace Sokoban.core.Level.Model
             rows = 0;
         }
 
-        private int gridSize = 30;
-        public int GridSize
-        {
-            get { return gridSize; }
-        }
-
         private Tile[,] tilemap;
 
         public void initMap(int x, int y) {

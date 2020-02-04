@@ -1,4 +1,5 @@
 ﻿using Sokoban.core;
+using Sokoban.core.Level;
 using Sokoban.core.Level.Model;
 using System;
 using System.Collections.Generic;
@@ -22,13 +23,17 @@ namespace Sokoban.views
     public partial class LevelEditor : Window
     {
         List<List<Tile>> tiles = new List<List<Tile>>();
-
+        int size = 29;
         ModelLevel modelLevel;
+        LevelLoader levelLoader;
+        String file;
 
         public LevelEditor(ModelLevel modelLevel)
         {
             InitializeComponent();
             this.modelLevel = modelLevel;
+            levelLoader = new LevelLoader(modelLevel);
+            availableLevels.ItemsSource = modelLevel.Levels;
 
             tileList.Items.Add(new Player());
             tileList.Items.Add(new Wall());
@@ -43,18 +48,18 @@ namespace Sokoban.views
 
         private void setup()
         {
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < size; i++)
             {
                 List<Tile> temp = new List<Tile>();
 
-                for(int y = 0; y < 30; y++)
+                for (int y = 0; y < size; y++)
                 {
                     temp.Add(new Empty());
                 }
                 tiles.Add(temp);
-                
+
             }
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < size; i++)
             {
                 horizontal();
                 vertical();
@@ -64,7 +69,7 @@ namespace Sokoban.views
 
         private void levelTile_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            int mX = (int) Mouse.GetPosition(levelTiles).X;
+            int mX = (int)Mouse.GetPosition(levelTiles).X;
             int mY = (int)Mouse.GetPosition(levelTiles).Y;
 
             int column = mX / modelLevel.GridSize;
@@ -77,7 +82,7 @@ namespace Sokoban.views
         {
             Tile tile;
             Console.WriteLine(tileList.SelectedItem.ToString());
-            switch(tileList.SelectedItem.ToString())
+            switch (tileList.SelectedItem.ToString())
             {
                 case "Sokoban.core.Level.Model.Player":
                     tile = new Player();
@@ -102,21 +107,25 @@ namespace Sokoban.views
             tile.SetValue(Grid.ColumnProperty, x);
             tile.SetValue(Grid.RowProperty, y);
 
-            levelTiles.Children.Remove(tiles[x][y]);
-            tiles[x][y] = tile;
-            levelTiles.Children.Add(tiles[x][y]);
+            levelTiles.Children.Remove(tiles[y][x]);
+            tiles[y][x] = tile;
+            levelTiles.Children.Add(tiles[y][x]);
         }
 
         private void delete_MouseDown(object sender, MouseButtonEventArgs e)
         {
             levelTiles.Children.Clear();
+            levelTiles.ColumnDefinitions.Clear();
+            levelTiles.RowDefinitions.Clear();
             setup();
         }
 
         private void clear_MouseDown(object sender, MouseButtonEventArgs e)
         {
             levelTiles.Children.Clear();
-            tiles = null;
+            levelTiles.ColumnDefinitions.Clear();
+            levelTiles.RowDefinitions.Clear();
+            tiles = new List<List<Tile>>();
             setup();
         }
 
@@ -127,7 +136,7 @@ namespace Sokoban.views
             levelTiles.ColumnDefinitions.Add(column);
         }
 
-        public void vertical ()
+        public void vertical()
         {
             RowDefinition row = new RowDefinition();
             row.Height = new GridLength(modelLevel.GridSize);
@@ -136,8 +145,73 @@ namespace Sokoban.views
 
         private void save_MouseDown(object sender, MouseButtonEventArgs e)
         {
-           
-            LevelSaver levelSaver = new LevelSaver(tiles, levelname.Text, numberMoves.Text,bullet.IsChecked.Value, warp.IsChecked.Value);
+
+            LevelSaver levelSaver = new LevelSaver(tiles, levelname.Text, numberMoves.Text, bullet.IsChecked.Value, warp.IsChecked.Value);
+        }
+
+        private void useMap()
+        {
+            levelTiles.Children.Clear();
+            levelTiles.ColumnDefinitions.Clear();
+            levelTiles.RowDefinitions.Clear();
+            tiles.Clear();
+
+            List<List<String>> tempM = modelLevel.tempLevData;
+
+            for (int i = 0; i < tempM.Count; i++)
+            {
+                horizontal();
+                vertical();
+            }
+
+            for (int y = 0; y < tempM.Count; y++)
+            {
+                List<Tile> temp = new List<Tile>();
+
+                for (int x = 0; x < tempM.Count; x++)
+                {
+                    Tile tile;
+                    switch (tempM[y][x])
+                    {
+                        case "o":
+                            tile = new Player();
+                            break;
+                        case "#":
+                            tile = new Wall();
+                            break;
+                        case " ":
+                            tile = new Floor();
+                            break;
+                        case "@":
+                            tile = new Dest();
+                            break;
+                        case "x":
+                            tile = new Crate();
+                            break;
+                        default:
+                            tile = new Empty();
+                            break;
+                    }
+                    tile.SetValue(Grid.ColumnProperty, x);
+                    tile.SetValue(Grid.RowProperty, y);
+
+                    temp.Add(tile);
+                    levelTiles.Children.Remove(tile);
+                    levelTiles.Children.Add(tile);
+                }
+                tiles.Add(temp);
+
+            }
+
+        }
+
+        private void availableLevels_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            modelLevel.CurrentLevel = availableLevels.SelectedItem.ToString();
+            levelLoader.initLevel();
+            levelLoader.initiateTileSet();
+            useMap();
+            file = availableLevels.SelectedItem.ToString();
         }
     }
 }

@@ -51,8 +51,8 @@ namespace Sokoban
 
             gameDef.Height = new GridLength(modelLevel.GDHeight);
 
-            this.Cont.Width = 16 + (modelLevel.levelData.columns * modelLevel.levelData.GridSize);
-            this.Cont.Height = 39 + (modelLevel.levelData.rows * modelLevel.levelData.GridSize) + modelLevel.GDHeight;
+            this.Cont.Width = 16 + (modelLevel.levelData.columns * modelLevel.GridSize);
+            this.Cont.Height = 39 + (modelLevel.levelData.rows * modelLevel.GridSize) + modelLevel.GDHeight;
 
             Console.WriteLine("Window \n width: " + Cont.Width + "\nHeight: " + Cont.Height);
 
@@ -63,7 +63,7 @@ namespace Sokoban
                 gameGrid.Visibility = Visibility.Collapsed;
             }
 
-            gameGrid = new GameGrid(modelLevel.levelData);
+            gameGrid = new GameGrid(modelLevel);
             gameGrid.SetValue(Grid.ColumnProperty, 0);
             gameGrid.SetValue(Grid.RowProperty, 1);
             gameGrid.HorizontalAlignment = HorizontalAlignment.Center;
@@ -164,7 +164,6 @@ namespace Sokoban
                             modelLevel.levelData.Tilemap[nextY, nextX] = modelLevel.levelData.Tilemap[pY, pX];
                             modelLevel.levelData.Tilemap[pY, pX] = null;
                             gameGrid.reDrawFloor(nextX, nextY);
-                            modelLevel.levelData.remaingTargets--;
                             
                         }
                         else if (modelLevel.levelData.Tilemap[nextY, nextX] is Deliver)
@@ -224,8 +223,8 @@ namespace Sokoban
         private void rotate()
         {
             RotateTransform angle = new RotateTransform();
-            angle.CenterY = 15;
-            angle.CenterX = 15;
+            angle.CenterY = modelLevel.GridSize / 2;
+            angle.CenterX = modelLevel.GridSize / 2;
             angle.Angle = direction;
             //modelLevel.levelData.Tilemap[pY, pX].RenderTransform = angle;
             modelLevel.levelData.player.RenderTransform = angle;

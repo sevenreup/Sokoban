@@ -115,7 +115,7 @@ namespace Sokoban.core.Level
                             row.Add(floor);
                             break;
                         case "+":
-                            Empty empty = new Empty(x, y);
+                            Floor empty = new Floor(x, y);
                             row.Add(empty);
                             break;
                     }
