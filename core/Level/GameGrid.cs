@@ -25,7 +25,7 @@ namespace Sokoban.core.Level
             renderTile();
             renderCharacters();
             bulletTimer = new System.Windows.Threading.DispatcherTimer();
-            bulletTimer.Interval = TimeSpan.FromSeconds(1);
+            bulletTimer.Interval = TimeSpan.FromMilliseconds(20);
         }
 
         private void renderTile()
@@ -57,6 +57,20 @@ namespace Sokoban.core.Level
                         Console.WriteLine("Dynamic : " + tile.image + ", (x: " + tile.X + ", Y: " + tile.Y + ")");
                         this.Children.Remove(tile);
                         this.Children.Add(tile);
+
+                        #region MyRegion
+                        if ((tile is Player))
+                            
+                            {
+                                Player player = (Player)tile;
+                                player.player.SetValue(Grid.ColumnProperty, x);
+                                player.player.SetValue(Grid.RowProperty, y);
+
+                                this.Children.Remove(player.player);
+                                this.Children.Add(player.player);
+                            } 
+                        #endregion
+
                     }
                 }
             }

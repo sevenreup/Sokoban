@@ -3,7 +3,6 @@ using Sokoban.core.Level.Model;
 using Sokoban.core.Level.power;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +12,7 @@ namespace Sokoban.core
     public class LevelSaver
     {
         LevelData levelData;
-        String name, file;
+        String name;
         List<List<Tile>> tiles;
         List<PowerUpHolder> powerUps = new List<PowerUpHolder>();
         int player = 0, destination = 0, crates = 0;
@@ -39,13 +38,10 @@ namespace Sokoban.core
         private void save()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            for(int i = 0; i < map.Length; i++)
+            foreach(String temp in map)
             {
-                String temp = map[i];
-                if (i == map.Length - 1)
-                    stringBuilder.Append(temp);
-                else
-                    stringBuilder.AppendLine(temp);
+                Console.WriteLine(temp);
+                stringBuilder.AppendLine(temp);
             }
             levelData.name = name;
             levelData.data = stringBuilder.ToString();
@@ -57,10 +53,8 @@ namespace Sokoban.core
             levelData.Moves = movesInt;
             levelData.PowerUps = powerUps;
             JObject jObject = JObject.FromObject(levelData);
-            file = $"levels/{name}.level";
-            StreamWriter streamWriter = new StreamWriter(file);
-            streamWriter.Write(jObject.ToString());
-            streamWriter.Close();
+            Console.Write(jObject.ToString());
+            
         }
 
         private void parseString()

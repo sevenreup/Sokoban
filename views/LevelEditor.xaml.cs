@@ -22,7 +22,7 @@ namespace Sokoban.views
     public partial class LevelEditor : Window
     {
         List<List<Tile>> tiles = new List<List<Tile>>();
-        int size = 29;
+
         ModelLevel modelLevel;
 
         public LevelEditor(ModelLevel modelLevel)
@@ -43,18 +43,18 @@ namespace Sokoban.views
 
         private void setup()
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < 30; i++)
             {
                 List<Tile> temp = new List<Tile>();
 
-                for(int y = 0; y < size; y++)
+                for(int y = 0; y < 30; y++)
                 {
                     temp.Add(new Empty());
                 }
                 tiles.Add(temp);
                 
             }
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < 30; i++)
             {
                 horizontal();
                 vertical();
@@ -102,9 +102,9 @@ namespace Sokoban.views
             tile.SetValue(Grid.ColumnProperty, x);
             tile.SetValue(Grid.RowProperty, y);
 
-            levelTiles.Children.Remove(tiles[y][x]);
-            tiles[y][x] = tile;
-            levelTiles.Children.Add(tiles[y][x]);
+            levelTiles.Children.Remove(tiles[x][y]);
+            tiles[x][y] = tile;
+            levelTiles.Children.Add(tiles[x][y]);
         }
 
         private void delete_MouseDown(object sender, MouseButtonEventArgs e)
