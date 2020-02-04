@@ -24,5 +24,11 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontStyle" Value="Italic"/>
         </Style>
+        <Style x:Key="dialog" TargetType="Window">
+            <Setter Property="AllowsTransparency" Value="True"/>
+            <Setter Property="WindowStyle" Value="None"/>
+            <Setter Property="ResizeMode" Value="NoResize"/>
+            <Setter Property="ShowInTaskbar" Value="False"/>
+        </Style>
     </Application.Resources>
 </Application>

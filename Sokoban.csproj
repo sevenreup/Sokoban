@@ -77,6 +77,9 @@
     <Compile Include="core\Level\PowerUp.cs" />
     <Compile Include="core\Level\Util.cs" />
     <Compile Include="core\Util.cs" />
+    <Compile Include="views\Help.xaml.cs">
+      <DependentUpon>Help.xaml</DependentUpon>
+    </Compile>
     <Compile Include="views\LevelEditor.xaml.cs">
       <DependentUpon>LevelEditor.xaml</DependentUpon>
     </Compile>
@@ -106,6 +109,10 @@
     <Compile Include="Game.xaml.cs">
       <DependentUpon>Game.xaml</DependentUpon>
     </Compile>
+    <Page Include="views\Help.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="views\LevelEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -190,6 +197,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="image\ui\menu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\ui\6284.jpg" />
+    <Resource Include="image\ui\Brickwall005.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

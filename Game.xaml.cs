@@ -19,6 +19,7 @@ namespace Sokoban
 
     public partial class Game : Window
     {
+        private static RoutedCommand routedCommand = new RoutedCommand(); 
         LevelLoader levelLoader;
         ModelLevel modelLevel;
         GameGrid gameGrid;
@@ -36,7 +37,8 @@ namespace Sokoban
         public Game()
         {
             InitializeComponent();
-
+            routedCommand.InputGestures.Add(new KeyGesture(Key.E, ModifierKeys.Control));
+            CommandBindings.Add(new CommandBinding(routedCommand, CommandBinding_Executed));
             modelLevel = new ModelLevel();
             levelLoader = new LevelLoader(modelLevel);
             gameState = new GameState(new BlockedResponse(checkBlockedState));
@@ -362,6 +364,26 @@ namespace Sokoban
         }
 
         private void Label_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            LevelEditor levelEditor = new LevelEditor(modelLevel);
+            levelEditor.Show();
+            levelEditor.Activate();
+        }
+
+        private void Help_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Help help = new Help();
+            help.Owner = this;
+            help.ShowDialog();
+
+        }
+
+        private void exit_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Close();
+        }
+
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             LevelEditor levelEditor = new LevelEditor(modelLevel);
             levelEditor.Show();

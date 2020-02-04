@@ -8,7 +8,10 @@
         Name="Cont"
         Title="Sokoban" Height="541.3" Width="724"  WindowStartupLocation="CenterScreen"
         KeyDown="keypress"
-        WindowState="Maximized" Background="#FF666666">
+        WindowState="Maximized">
+    <Window.Background>
+        <ImageBrush ImageSource="image/ui/6284.jpg"/>
+    </Window.Background>
     <Grid>
         <Grid Name="splash" >
             <Grid.RowDefinitions>
@@ -28,13 +31,13 @@
                 <Label   Height="91" 
                     Style="{StaticResource MenuItem}" Content="Help"
                     VerticalAlignment="Bottom" HorizontalAlignment="Center" Cursor="Hand"
-                    />
-                <Label   Height="91" 
+                    MouseDown="Help_MouseDown"/>
+                <Label Name="exit"   Height="91" 
                     Style="{StaticResource MenuItem}" Content="Exit"
                     VerticalAlignment="Bottom" HorizontalAlignment="Center" Cursor="Hand"
-                    />
+                    MouseDown="exit_MouseDown"/>
             </StackPanel>
-            <Label Grid.Row="2" Content="LevelEditor" MouseDown="Label_MouseDown"/>
+            <!--<Label Grid.Row="2" Content="LevelEditor" MouseDown="Label_MouseDown"/> -->
         </Grid>
         <Grid Name="gameCanvas" Margin="20 20 20 0"  Visibility="Collapsed">
             <Grid.ColumnDefinitions>
