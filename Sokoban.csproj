@@ -46,7 +46,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -59,9 +58,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WpfAnimatedGif, Version=1.4.18.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\WpfAnimatedGif.1.4.18\lib\net\WpfAnimatedGif.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -69,19 +65,29 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="core\events\GameStateEve.cs" />
+<<<<<<< HEAD
     <Compile Include="core\GameState.cs" />
     <Compile Include="core\LevelSaver.cs" />
+=======
+>>>>>>> parent of 37e7bc7... finished the core game
     <Compile Include="core\Level\Model\Bullet.cs" />
     <Compile Include="core\Level\Model\Empty.cs" />
-    <Compile Include="core\Level\Model\Player2.cs" />
     <Compile Include="core\Level\PowerUp.cs" />
     <Compile Include="core\Level\Util.cs" />
+<<<<<<< HEAD
     <Compile Include="core\Util.cs" />
     <Compile Include="views\LevelEditor.xaml.cs">
       <DependentUpon>LevelEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="views\StatusDialog.xaml.cs">
       <DependentUpon>StatusDialog.xaml</DependentUpon>
+=======
+    <Compile Include="views\FailedDialog.xaml.cs">
+      <DependentUpon>FailedDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="views\LevelComplete.xaml.cs">
+      <DependentUpon>LevelComplete.xaml</DependentUpon>
+>>>>>>> parent of 37e7bc7... finished the core game
     </Compile>
     <Page Include="Game.xaml">
       <SubType>Designer</SubType>
@@ -106,7 +112,15 @@
     <Compile Include="Game.xaml.cs">
       <DependentUpon>Game.xaml</DependentUpon>
     </Compile>
+<<<<<<< HEAD
     <Page Include="views\LevelEditor.xaml">
+=======
+    <Page Include="views\FailedDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="views\LevelComplete.xaml">
+>>>>>>> parent of 37e7bc7... finished the core game
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -169,27 +183,6 @@
   <ItemGroup>
     <Resource Include="image\bullet.png" />
     <Resource Include="image\bullet_icon.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="image\spritesheet\sokoban_tilesheet.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="image\ui\completed.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="image\ui\bg-01.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="image\ui\next.png" />
-    <Resource Include="image\ui\prev.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="image\ui\restart.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="image\ui\menu.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
